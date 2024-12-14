@@ -12,6 +12,14 @@ Syntax = [
     {"RegEx": r"log\((.*?)\)", "To":"print($1)"},
     # if
     {"RegEx":"if (.*?) then", "To":"if $1:"},
+    # else
+    {"RegEx":"else", "To":"else:"},
+    # elif
+    {"RegEx":"elif (.*?) then", "To":"elif $1:"},
+    # putPy
+    {"RegEx":"putPy (.*?)", "To":"import $1"},
+    # evalPy
+    {"RegEx":"evalPy(.*?)", "To":"eval($1)"},
     # for
     {"RegEx": "for (.*?) do", "To":"for $1:"},
     # while
@@ -43,7 +51,7 @@ Syntax = [
     # del
     {"RegEx": "del (.*?)", "To":"del $1"},
     # quit
-    {"RegEx": "quit\((.*?)\)", "To":"exit($1)"},
+    {"RegEx": r"quit\((.*?)\)", "To":"exit($1)"},
     # throw
     {"RegEx": "throw (.*?)", "To":"raise $1"}
 ]
