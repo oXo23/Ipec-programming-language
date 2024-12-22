@@ -1,6 +1,12 @@
 # Nex programming language made by @oXo23 on github
 # Nex(R) 2023-2024(C)
 
+# exporting config
+exports = {
+    "windows":"windows.bat $1 $2",
+    # linux:"bash linux.sh $1 $2", coming soon
+}
+
 import re
 import subprocess
 import sys
@@ -101,53 +107,41 @@ def compile(source_code):
 
 
 def main():
-    scrpt_template = ""
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 1 and sys.argv[1] != "-NC":
         filename = sys.argv[1]
     else:
         filename = input(
             "Enter the path of the .nex file or a file with any file type to compile: "
         )
-    with open(filename, "r") as file:
-        script = file.read()
     system = os.name
     if system == "nt":
         os.system("cls")
     else:
         os.system("clear")
-    path = os.path.dirname(os.path.abspath(__file__))
-    scrpt_template += f"cpath = '{path}'\n"
-    scrpt_template += f"path = '{filename}'\n"
-    script = scrpt_template + script
-    log = compile(script)
-    cleared = False
-    lines = log.split("\n")
-    i = 0
-    while i < len(lines):
-        logl = lines[i]
-        if "Traceback" in logl and "Warning" not in logl:
-            if not cleared:
-                cleared = True
-                if system == "nt":
-                    os.system("cls")
-                else:
-                    os.system("clear")
-            traceback_lines = lines[i:i+6]
-            file_line = traceback_lines[1]
-            file_name = file_line.split('"')[1]
-            line_num = file_line.split(',')[1].split(' ')[2]
-            code_line = script.split("\n")[int(line_num)]
-            exception_msg = traceback_lines[4].strip()
-            print("!!Traceback!!:")
-            print(f"Script: {file_name}")
-            print(f"\non line {line_num}:")
-            print(f"    {code_line}\n")
-            print("Returned:")
-            print(f"    {exception_msg}")
-            exit(-1)
-        i += 1
-    os.system("python temp.nexC")
-    os.remove("temp.nexC")
+    compile(open(filename, "r").read())
+    # compile if no -NC flag was not given
+    if "-NC" not in sys.argv:
+        print('Compiling as "compiled.exe"....\nPlease remember that compiling as a windows executable is still in beta, please report ny issues on github.com/oxo23/nex')
+        export("temp.nexC")
+    else:
+        os.system("python temp.nexC")
+        os.remove("temp.nexC")
+    return 1 # succesful baby!
 
+def export(name):
+    # get user system
+    system = os.name
+    print(sys.argv)
+    # get user os, linux = fail,windows=success
+    if system == "nt":
+        # make a new dir for the compiled app
+        app = input("enter app name:")
+        os.mkdir(app)
+        os.system(exports["windows"].replace("$1", "temp_win.bat").replace("$2", f"../{app}/compiled.exe"))
+        # copy the nex script into the dir as main.py
+        os.system(f"copy {name} {app}/bin/main.py")
+    else:
+        print("linux exporting is not supported, use -NC flag next time you run a nex script for ex:nex.py main.nex -NC")
 if __name__ == "__main__":
-    main()
+    res = main()
+    del res # res ain't used for anything anyways
