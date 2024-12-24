@@ -2,13 +2,13 @@
 
 putPy tkinter
 
+func greet() do
+    log("Hello from Nex!")
+end
+
 func main() do
     var root = tkinter.Tk()
     root.title("Nex GUI Example")
-
-    func greet() do
-        log("Hello from Nex GUI!")
-    end
 
     var button = tkinter.Button(root, text="Click Me", command=greet)
     button.pack()
