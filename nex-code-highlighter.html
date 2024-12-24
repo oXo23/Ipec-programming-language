@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nex Code Highlighter</title>
+    <style>
+        body {
+            background-color: #1f1f1f;
+            color: white;
+            font-family: monospace;
+            padding: 20px;
+        }
+        .keyword { color: red; }
+        .variable { color: yellow; }
+        .symbol { color: yellow; }
+        .comment { color: green; }
+        .multi-comment { color: lightgray; }
+    </style>
+</head>
+<body>
+    <h1>Nex Code Highlighter</h1>
+    <textarea id="nexCode" rows="10" cols="50" placeholder="Enter your Nex code here..."></textarea>
+    <button onclick="highlightCode()">Highlight Code</button>
+    <pre id="output"></pre>
+
+    <script>
+        function highlightCode() {
+            const code = document.getElementById('nexCode').value;
+            let highlightedCode = code
+                .replace(/#.*$/gm, '<span class="comment">$&</span>') // Single-line comments
+                .replace(/""".*?"""/gs, '<span class="multi-comment">$&</span>') // Multi-line comments
+                .replace(/\b(log|if|else|elif|for|while|func|class|try|except|finally|return|global|del|break|continue|throw)\b/g, '<span class="keyword">$&</span>') // Keywords
+                .replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g, '<span class="variable">$&</span>'); // Variables
+
+            document.getElementById('output').innerHTML = highlightedCode;
+        }
+    </script>
+</body>
+</html>
