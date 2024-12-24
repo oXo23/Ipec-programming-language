@@ -1,12 +1,6 @@
 # Nex programming language made by @oXo23 on github
 # Nex(R) 2023-2024(C)
 
-# exporting config
-exports = {
-    "windows":"windows.bat $1 $2",
-    # linux:"bash linux.sh $1 $2", coming soon
-}
-
 import re
 import subprocess
 import sys
@@ -121,7 +115,6 @@ def main():
     compile(open(filename, "r").read())
     # compile if no -NC flag was not given
     if "-NC" not in sys.argv:
-        print('Compiling as "compiled.exe"....\nPlease remember that compiling as a windows executable is still in beta, please report ny issues on github.com/oxo23/nex')
         export("temp.nexC")
     else:
         os.system("python temp.nexC")
@@ -136,12 +129,24 @@ def export(name):
     if system == "nt":
         # make a new dir for the compiled app
         app = input("enter app name:")
-        os.mkdir(app)
-        os.system(exports["windows"].replace("$1", "temp_win.bat").replace("$2", f"../{app}/compiled.exe"))
-        # copy the nex script into the dir as main.py
-        os.system(f"copy {name} {app}/bin/main.py")
+        print(f'Compiling as "{app}.exe"....\nPlease remember that compiling as a windows executable is still in beta, please report ny issues on github.com/oxo23/nex')
+        try:
+                os.mkdir(app)
+        except FileExistsError as e:
+                pass
+        except Exception as e:
+                raise e
+        # converting the nexC file into an .exe
+        os.system(f"ren {name} {name.replace(".nexC","")}.py")
+        os.system(f"windows.bat {name.replace(".nexC","")}.py")
+        # renaming the exe
+        os.system(f"ren {name.replace(".nexC","")}.exe {app}.exe")
+        # move the exe into the dir
+        os.system(f"move {app}.exe {app}")
+        # deleting the temp file
+        os.remove(f"{name.replace(".nexC","")}.py")
+        print(f"Compeleted compiling, your app is at {app}/{app}.exe")
     else:
         print("linux exporting is not supported, use -NC flag next time you run a nex script for ex:nex.py main.nex -NC")
 if __name__ == "__main__":
-    res = main()
-    del res # res ain't used for anything anyways
+    main()
