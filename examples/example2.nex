@@ -7,10 +7,10 @@ func greet() do
 end
 
 func main() do
-    var root = tkinter.Tk()
+    root = tkinter.Tk()
     root.title("Nex GUI Example")
 
-    var button = tkinter.Button(root, text="Click Me", command=greet)
+    button = tkinter.Button(root, text="Click Me", command=greet)
     button.pack()
 
     root.mainloop()
