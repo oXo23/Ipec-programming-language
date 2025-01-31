@@ -92,7 +92,5 @@ log(fibonacci(10))</code></div></div></pre>
 <p>Contributions are welcome! Please open an issue or submit a pull request on GitHub.</p>
 <h2>License</h2>
 <p>See the <a href="LICENSE">LICENSE</a> file for more details.</p>
-<h2>Contact</h2>
-<p>For more information, please contact the author at <a href="mailto:esuper223@gmail.com">esuper223@gmail.com</a>.</p>
 <hr>
 <p>Happy coding with Nex!</p></div>
