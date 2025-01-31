@@ -56,6 +56,36 @@ Syntax = [
     {"RegEx": "throw (.*?)", "To":"raise $1"}
 ]
 
+Syntax.extend([
+    {"RegEx": r"printJson\((.*?)\)", "To": "print(json.dumps($1))"},
+    {"RegEx": r"readFile\((.*?)\)", "To": "with open($1, 'r') as file:\n    return file.read()"},
+    {"RegEx": r"writeFile\((.*?), (.*?)\)", "To": "with open($1, 'w') as file:\n    file.write($2)"},
+    {"RegEx": r"appendFile\((.*?), (.*?)\)", "To": "with open($1, 'a') as file:\n    file.write($2)"},
+    {"RegEx": r"deleteFile\((.*?)\)", "To": "os.remove($1)"},
+    {"RegEx": r"listDir\((.*?)\)", "To": "os.listdir($1)"},
+    {"RegEx": r"httpGet\((.*?)\)", "To": "requests.get($1).text"},
+    {"RegEx": r"httpPost\((.*?), (.*?)\)", "To": "requests.post($1, data=$2).text"},
+    {"RegEx": r"jsonParse\((.*?)\)", "To": "json.loads($1)"},
+    {"RegEx": r"jsonStringify\((.*?)\)", "To": "json.dumps($1)"},
+    {"RegEx": r"sleep\((.*?)\)", "To": "time.sleep($1)"},
+    {"RegEx": r"randomInt\((.*?), (.*?)\)", "To": "random.randint($1, $2)"},
+    {"RegEx": r"randomFloat\((.*?), (.*?)\)", "To": "random.uniform($1, $2)"},
+    {"RegEx": r"currentTime\(\)", "To": "datetime.datetime.now().strftime('%H:%M:%S')"},
+    {"RegEx": r"currentDate\(\)", "To": "datetime.datetime.now().strftime('%Y-%m-%d')"},
+    {"RegEx": r"formatString\((.*?), (.*?)\)", "To": "$1.format($2)"},
+    {"RegEx": r"isEmpty\((.*?)\)", "To": "len($1) == 0"},
+    {"RegEx": r"isNull\((.*?)\)", "To": "$1 is None"},
+    {"RegEx": r"map\((.*?), (.*?)\)", "To": "list(map($1, $2))"},
+    {"RegEx": r"filter\((.*?), (.*?)\)", "To": "list(filter($1, $2))"},
+    {"RegEx": r"reduce\((.*?), (.*?)\)", "To": "from functools import reduce\nreduce($1, $2)"},
+    {"RegEx": r"unique\((.*?)\)", "To": "list(set($1))"},
+    {"RegEx": r"merge\((.*?), (.*?)\)", "To": "$1.update($2)"},
+    {"RegEx": r"splitString\((.*?), (.*?)\)", "To": "$1.split($2)"},
+    {"RegEx": r"joinList\((.*?), (.*?)\)", "To": "$1.join($2)"},
+    {"RegEx": r"contains\((.*?), (.*?)\)", "To": "$1 in $2"},
+    {"RegEx": r"length\((.*?)\)", "To": "len($1)"},
+    {"RegEx": r"typeOf\((.*?)\)", "To": "type($1).__name__"},
+])
 
 def compile(source_code):
     global log
@@ -147,6 +177,6 @@ def export(name):
         os.remove(f"{name.replace(".nexC","")}.py")
         print(f"Compeleted compiling, your app is at {app}/{app}.exe")
     else:
-        print("linux exporting is not supported, use -NC flag next time you run a nex script for ex:nex.py main.nex -NC")
+        print("linux exporting is not supported, use -NC flag next time you run a nex script for ex:python nex.py main.nex -NC")
 if __name__ == "__main__":
     main()
