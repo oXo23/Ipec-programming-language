@@ -98,26 +98,26 @@ def compile(source_code):
             if resource.startswith("http://") or resource.startswith("https://"):
                 response = requests.get(resource)
                 if response.status_code == 200:
-                    processed_code.append(response.text)
+                    processed_code += [response.text]
                 else:
                     raise Exception(f"Failed to fetch {resource}: {response.status_code}")
             else:
                 try:
-                    with open(resource, "r") as file:
-                        processed_code.append(file.read())
+                    with open(resource, "r", encoding="utf-8") as file:
+                        processed_code += [file.read()]
                 except FileNotFoundError:
                     raise Exception(f"File not found: {resource}")
         else:
-            processed_code.append(line)
+            processed_code += [line]
     output_code = "\n".join(processed_code)
     for rule in Syntax:
         output_code = re.sub(
             rule["RegEx"],
             lambda match: re.sub(r'\$(\d+)', lambda m: match.group(int(m.group(1))), rule["To"]),
-            output_code)
+            output_code
+        )
 
-
-    with open("temp.nexC", "w") as file:
+    with open("temp.nexC", "w", encoding="utf-8") as file:
         file.write(output_code)
     process = subprocess.Popen(
         ["python", "temp.nexC"],
@@ -142,14 +142,13 @@ def main():
         os.system("cls")
     else:
         os.system("clear")
-    compile(open(filename, "r").read())
-    # compile if no -NC flag was not given
+    compile(open(filename, "r", encoding="utf-8").read())
     if "-NC" not in sys.argv:
         export("temp.nexC")
     else:
         os.system("python temp.nexC")
         os.remove("temp.nexC")
-    return 1 # succesful baby!
+    return 1  # successful baby!
 
 def export(name):
     # get user system
